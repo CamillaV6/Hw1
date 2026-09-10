@@ -17,9 +17,13 @@ using namespace std;
 
 unsigned long long int power(unsigned int base, unsigned int exponent) { //calculates the exponent
 	
-	unsigned long long int total = 1; //set total as 1 so it will return 1 if exponent is 0
+	if (exponent == 0) {
+		return 1;
+	}
 	
-	for (int i = 0; i < exponent; i++) { //use loop so number will multiply for exponent amount of times but skip if exonent is 0
+	unsigned long long int total = base; //set total as 1 so it will return 1 if exponent is 0
+	
+	for (int i = 0; i < exponent - 1; i++) { //use loop so number will multiply for exponent amount of times but skip if exonent is 0
 		total = total * base;
 	}
 	
@@ -80,10 +84,16 @@ int main(int argc, char* argv[]) { //https://www.geeksforgeeks.org/cpp/command-l
 	
 	//chacking validity with try catch because I find it easier than converting to string and finding specific characters
 	try { //tries convering to int
+		
 		base = stoi(argv[1]);
 		exponent = stoi(argv[2]);
 		//Google seach overview helped me converting arguments to int
 		//also helped with error types
+		if ((to_string(base).size() != string(argv[1]).length()) || (to_string(exponent).size() != string(argv[2]).length())) {
+			cout << "please enter integers" << endl;
+			return 1;
+		}
+		
 	}
 	catch (const invalid_argument& e) { //if invalid, catches and asks for int inputs
 		cout << "please enter integers" << endl;
@@ -95,6 +105,10 @@ int main(int argc, char* argv[]) { //https://www.geeksforgeeks.org/cpp/command-l
 	}
 	if (base < 0 || exponent < 0) { //checks positive int
 		cout << "positive integers only" << endl;
+		return 1;
+	}
+	if (base == 0 && exponent == 0) {
+		cout << "0 ^ 0 is undefined" << endl;
 		return 1;
 	}
 	if (!((exponent * log(base)) < (64 * log(2)))) {//checks overflow
